@@ -6,46 +6,44 @@ import {
   Theme,
   Typography,
 } from "@material-ui/core";
-import { GetStaticProps } from "next";
-import Head from "next/head";
 import React, { useState } from "react";
 import { PlayerActions } from "../src/components/PlayerActions";
 import { PlayerDisplay } from "../src/components/PlayerDisplay";
-import { Action, dealNewGame, GameBoard } from "../src/model/game";
-import { Player } from "../src/model/player";
+import {
+  Action,
+  dealNewGame,
+  findWinner,
+  GameBoard,
+  processAction,
+} from "../src/model/game";
 
-import { produce } from "immer";
+import { CardDisplay } from "../src/components/CardDisplay";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: "100vh",
+      // height: "100vh",
     },
   })
 );
 
-interface Props {
-  board: GameBoard;
-}
-
 export default function Home() {
   const classes = useStyles();
   const [board, setBoard] = useState<GameBoard>(() => dealNewGame());
+  const [showTopCard, setShowTopCard] = useState<boolean>(false);
 
   const doAction = (a: Action) => {
-    if (a === "skip") {
-      setBoard(
-        produce((draft: GameBoard) => {
-          if (draft.nextPlayerIdx === 0) {
-            draft.nextPlayerIdx = 1;
-          } else {
-            draft.nextPlayerIdx = 0;
-          }
-        })
-      );
-    }
+    setShowTopCard(true);
+
+    setTimeout(() => {
+      setShowTopCard(false);
+      setBoard((b) => processAction(b, a));
+    }, 2000);
   };
+
+  const winner = findWinner(board);
+  const gameOver = !!winner;
 
   return (
     <Box px={1}>
@@ -56,17 +54,25 @@ export default function Home() {
       </Box>
       <Grid container className={classes.root} spacing={1}>
         {board.players.map((player, idx) => {
-          const isCurrentPlayer = idx === board.nextPlayerIdx;
+          const isCurrentPlayer = !gameOver && idx === board.nextPlayerIdx;
           return (
             <Grid key={player.name} item xs={6}>
               <PlayerDisplay player={player} current={isCurrentPlayer} />
-              {isCurrentPlayer && (
-                <PlayerActions player={player} doAction={doAction} />
-              )}
+              <Box mt={2} display="flex" justifyContent="space-evenly">
+                {isCurrentPlayer && showTopCard && (
+                  <CardDisplay card={player.deck[0]} />
+                )}
+                {isCurrentPlayer && !showTopCard && (
+                  <PlayerActions player={player} doAction={doAction} />
+                )}
+              </Box>
             </Grid>
           );
         })}
       </Grid>
+      <Box>
+        {winner && <Typography>{winner.name} is the winner</Typography>}
+      </Box>
     </Box>
   );
 }

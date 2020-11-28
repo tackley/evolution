@@ -10,10 +10,14 @@ interface Props {
 
 export const PlayerActions: React.FC<Props> = ({ player, doAction }) => {
   return (
-    <Box mt={2} display="flex" justifyContent="center">
-      <Button variant="contained" onClick={() => doAction("skip")}>
-        Skip My Go
+    <>
+      <Button variant="contained" onClick={() => doAction("science")}>
+        Science
       </Button>
-    </Box>
+      <Button variant="contained" onClick={() => doAction("attack")}>
+        Attack
+      </Button>
+      <Button onClick={() => doAction("skip")}>Skip</Button>
+    </>
   );
 };
