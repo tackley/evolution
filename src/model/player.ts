@@ -1,4 +1,5 @@
 import { Card } from "./card";
+import { Technology } from "./technology";
 
 export interface Player {
   name: string;
@@ -6,4 +7,6 @@ export interface Player {
   deck: Card[];
   scienceForce: number;
   attackForce: Card[];
+
+  researched: Technology[];
 }

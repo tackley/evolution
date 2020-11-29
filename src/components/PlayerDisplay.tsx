@@ -45,6 +45,13 @@ export const PlayerDisplay: React.FC<Props> = ({ player, current }) => {
 
       <Box pt={2}>
         <Typography align="center" variant="subtitle1">
+          Researched:{" "}
+        </Typography>
+        <AttackForceDisplay attackForce={player.researched} />
+      </Box>
+
+      <Box pt={2}>
+        <Typography align="center" variant="subtitle1">
           Science Force: {player.scienceForce}
         </Typography>
       </Box>

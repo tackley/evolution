@@ -2,8 +2,12 @@ import { Typography } from "@material-ui/core";
 import React from "react";
 import { Card } from "../model/card";
 
+interface HasName {
+  name: string;
+}
+
 interface Props {
-  attackForce: Card[];
+  attackForce: HasName[];
 }
 
 export const AttackForceDisplay: React.FC<Props> = ({ attackForce }) => {

@@ -1,5 +1,5 @@
-import {Player} from "./player";
+import { Player } from "./player";
 
 it("should work", () => {
-    expect(2+2).toBe(4);
+  expect(2 + 2).toBe(4);
 });

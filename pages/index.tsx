@@ -39,7 +39,7 @@ export default function Home() {
     setTimeout(() => {
       setShowTopCard(false);
       setBoard((b) => processAction(b, a));
-    }, 2000);
+    }, 500);
   };
 
   const winner = findWinner(board);
