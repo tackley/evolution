@@ -45,19 +45,54 @@ it("should process science correctly for a player", () => {
 });
 
 it("should process attack correctly for a player", () => {
-  const board = produce(dealNewGame(), (draft) => {
-    draft.players[0].scienceForce = 10;
-  });
+  const board = dealNewGame();
 
   expect(board.nextPlayerIdx).toEqual(0);
-  const newBoard = processAction(board, mkActionResearch(TECH2));
+  const newBoard = processAction(board, ACTION_ATTACK);
 
-  expect(newBoard.nextPlayerIdx).toEqual(0);
+  expect(newBoard.nextPlayerIdx).toEqual(1);
   const redPlayer = newBoard.players[0];
-  expect(redPlayer.scienceForce).toEqual(7);
-  expect(redPlayer.deck).toHaveLength(4);
-  expect(redPlayer.researched).toHaveLength(2);
-  expect(redPlayer.researched).toContain(TECH2);
+  expect(redPlayer.attackForce).toHaveLength(1);
+  expect(redPlayer.deck).toHaveLength(3);
+
+  expect(redPlayer).toMatchInlineSnapshot(`
+    Object {
+      "attackForce": Array [
+        Object {
+          "name": "1",
+          "value": 1,
+        },
+      ],
+      "deck": Array [
+        Object {
+          "name": "1",
+          "value": 1,
+        },
+        Object {
+          "name": "1",
+          "value": 1,
+        },
+        Object {
+          "name": "1",
+          "value": 1,
+        },
+      ],
+      "health": 50,
+      "name": "Red",
+      "researched": Array [
+        Object {
+          "card": Object {
+            "name": "1",
+            "value": 1,
+          },
+          "cost": 0,
+          "name": "1",
+          "prereqs": Array [],
+        },
+      ],
+      "scienceForce": 0,
+    }
+  `);
 });
 
 it("should do attacks at end of turn", () => {
